@@ -1,0 +1,31 @@
+>> Control reads / DAQ sends:
+
+topic = trigger/{channel-id}/parameter
+
+payload = {
+    "ChannelId": 3,
+    "InjectedPulse": {
+        "Energy": 42667.0,  # is this the TPA ? 
+        "Type": "TestPulse",
+        "nsTs": 4799090005531000,
+        "nsTsUTC": 140196121154224
+    },
+    "LBaseline": 0.18045235450579847,
+    "PulseHeight": 0.03339375199042272,
+    "nsTsTrigger": 4799090007210000,
+    "nsTsUTC": 1667840235744172000,
+    "nsTsWindow": 4799090007210000  # ?  
+}
+
+
+>> Control sends / DAQ reads:
+
+topic = signalshape/{channel-id}/reset
+
+payload = {
+    "nsTsUTC": 1667846201426823446,
+    "Mode": "Fixed",
+    "Value": 0.29159582373493786,
+    "loop_status": "CLOSED",
+    "status": "OK"
+}

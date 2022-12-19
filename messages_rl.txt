@@ -1,0 +1,34 @@
+>> Control reads / DAQ sends:
+
+topic = trigger/{channel-id}/parameter
+
+payload = {
+    "ChannelId": 3,
+    "InjectedPulse": {
+        "TPA": 1.0,
+        "nsTs": 4799090005531000,
+        "nsTsUTC": 140196121154224
+    },
+    "LBaseline": 0.18045235450579847,  # this is optional
+    "PulseHeight": 0.03339375199042272,  # this is optional
+    "RMS": 0.03339375199042272,  # this is optional
+    "DAC": 3., 
+    "BiasCurrent": 2.,
+    "nsTsTrigger": 4799090007210000,
+    "nsTsUTC": 1667840235744172000,
+    "nsTsWindow": 4799090007210000,
+    "BytesPerSample": 2,
+    "Samples": <send maybe as string?>,
+}
+
+
+>> Control sends / DAQ reads:
+
+topic = control/{channel-id}/set_control
+
+payload = {
+    "ChannelId": 3,
+    "nsTsUTC": 1667846201426823446,
+    "DAC": 3, 
+    "BiasCurrent": 2,  # for CCS this is also a DAC value?
+}
