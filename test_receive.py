@@ -18,7 +18,7 @@ from utils import *
 # In[2]:
 
 
-broker = 'broker.hivemq.com'
+broker = 'localhost'  # 'broker.hivemq.com'
 port = 1883
 client_id = 'test-secondary'
 username = 'fwagner2'
