@@ -22,6 +22,8 @@ from envs import OptimizationEnv
 from sac import SoftActorCritic
 from rlutils import ReturnTracker, ReplayBuffer
 
+import pickle
+
 
 # In[2]:
 
@@ -42,6 +44,14 @@ def receive_and_print(client, userdata, msg):
         print(time.time(), msg.topic)
         print(json.loads(msg.payload))
         print('\n')
+        
+        if msg.topic == 'ccs/trigger/samples':
+            data = json.loads(msg.payload)
+            print(type(data['Samples']))
+            print(len(data['Samples']))
+            
+            with open('Samples.pickle', 'wb') as handle:
+                pickle.dump(data, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     except KeyError as err_msg:
         print('KeyError: ', err_msg)
