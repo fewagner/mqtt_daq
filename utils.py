@@ -4,14 +4,14 @@ import time
 from tqdm.auto import tqdm, trange
 import pickle
 
-def connect_mqtt(broker, port, client_id, username, password):
+def connect_mqtt(broker, port, client_id, username, password, userdata):
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
             print("Connected to MQTT Broker!")
         else:
             print("Failed to connect, return code %d\n", rc)
     # Set Connecting Client ID
-    client = mqtt_client.Client(client_id)
+    client = mqtt_client.Client(client_id, userdata=userdata)
     client.username_pw_set(username, password)
     client.on_connect = on_connect
     client.connect(broker, port)
