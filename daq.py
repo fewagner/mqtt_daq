@@ -15,8 +15,8 @@ from utils import *
 # In[2]:
 
 
-broker = 'broker.hivemq.com'
-port = 1883
+broker = 'localhost'  # 'broker.hivemq.com'
+port = 10401
 client_id = 'daq-primary'
 username = 'fwagner'
 password = '1234'
@@ -38,7 +38,7 @@ bias_current = np.random.uniform(-1, 1, size=nmbr_channels)
 # In[4]:
 
 
-client = connect_mqtt(broker, port, client_id, username, password)
+client = connect_mqtt(broker, port, client_id, username, password, userdata={})
 
 
 # In[5]:

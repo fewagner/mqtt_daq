@@ -1,0 +1,132 @@
+1) ESTABLISH AND TEST CONNECTION TO BROKER
+
+To receive and send via the MQTT broker (running on cresst-data port 1883) need .ssh/config like this:
+
+host lngs
+    hostname linux.lngs.infn.it
+    ServerAliveInterval 120
+    ForwardX11 yes
+    LocalForward localhost:10401 cresst-data:1883
+    ControlMaster auto
+    ControlPath ~/.ssh/master-%C
+    
+then do
+
+ssh lngs
+
+now the broker is mounted to port 10401 on your localhost
+
+the scripts test_send.py and test_receive.py are for testing the connection with the broker.
+
+the script listen_all.py subscribes to the relevant channels for the detector control and is useful to monitor and debug communication
+
+
+
+2) TEST COMMUNICATION OF PROCESSES WITH EACH OTHER
+
+three processes interact for the automatic detector control: the DAQ, the control and the training of the neural network
+
+to test the communication protocals we have three mock-scripts: daq.py, control.py and training.py
+
+their tasks are (MQTT channel names are different in mock scripts and on the CCS mqtt!):
+
+- the DAQ injects a test pulse to the experiments every few seconds, measures the pulse and sends an MQTT message with the pulse via the channel "trigger/..."
+
+- the control subscribes "trigger/...", and therefore reads the message from the DAQ. it inputs the pulse parameters to the neural network, which predicts new control parameters (DAC/bias)
+
+- the control also writes the pulse parameters to a buffer, which is implemented as a memory mapped array
+
+- the control responds with a message containing the new control parameters via the channel "control/..."
+
+- the DAQ subscribes "control/...", receives the message and sets the new control parameters
+
+- the training script trains the neural network on the buffer and periodically saves the latest version of the network such that the control can access it
+
+in the real-world setup the role of the DAQ script would be taken by CCS!
+
+
+
+3) TRAIN AGENT WITH MOCK ENV VIA MQTT
+
+we also want to test training of agents via MQTT 
+
+for this we have three notebooks: daq_rl.ipynb, control_rl.ipynb, training_rl.ipynb
+
+the roles of the notebooks are like in point 2), but instead of a mock CCS environment we use a generic optimization Env, but with the actual RL agents and classes
+
+to just start all three notebooks, the outputs are formattet such that we can observe the process of data collection and training
+
+for training put userdata['greedy'] = True in the control notebook (specific cell for that before the loop starts)
+
+for testing the trained agent put userdata['greedy'] = False
+
+if optimization is not good, very likely just longer training is needed!
+
+
+
+4) TRAIN AGENT WITH CCS PROTOCOL BUT SIMULATION INSTEAD CCS
+
+for this you need to operate in the repository cryoenv (github.com/fewagner/CryoEnv), in the folder tests/mqtt/
+
+the concept here is the same as in the two steps before, we have a DAQ an control and a training process
+
+all constants, hyperparameters and the MQTT messages are defined in the file mqtt_protocol.py
+
+put path_test to a folder where you want to store the buffer and models
+
+the three notebooks daq_cryoenv.ipynb, control_cryoenv.ipynb and training_cryoenv.ipynb are the three processes
+
+start them and see if the training works
+
+remember you can use the script listen_all.py to monitor the communication
+
+
+
+5) TRAIN AGENT WITH CCS AND ON REAL DETECTORS
+
+this works exactly as the previous step only that you do not need the notebook daq_cryoenv, but instead a the CCS does this part of the communication (otherwise exactly same protocols, etc)
+
+
+
+X) THESE FILES ARE UTILITIES AND NEEDED BUT NEED NOT BE OPENED AND SHOULD NOT BE CHANGED (unless you know what you are doing)
+
+utils.py -- functions for MQTT connection
+
+rlutils.py -- functions for the reinforcement learning training of the agent
+
+sac.py -- the Soft Actor Critic agent
+
+envs.py -- contains a trivial RL environment to test the classes
+
+
+
+Y) THESE FILES ARE JUST TESTS AND YOU DONT NEED TO CARE ABOUT THEM AT ALL (also not needed for operation)
+
+daq.ipynb 
+
+control.ipynb 
+
+training.ipynb
+
+rl_no_mqtt.ipynb
+
+
+
+Z) THESE FILES IN cryoenv/tests/mqtt/ ARE UTILITIES AND NEEDED BUT NEED NOT BE OPENED AND SHOULD NOT BE CHANGED (unless you know what you are doing)
+
+on_message_notebook.py
+
+on_message.py
+
+
+
+ZZ) THESE FILES IN cryoenv/tests/mqtt/ ARE JUST TESTS OR ANALYSIS AND YOU DONT NEED TO CARE ABOUT THEM AT ALL (also not needed for operation)
+
+world_model_prototype.ipynb
+
+calculations.ipynb
+
+plots_from_GS.ipynb
+
+polar_plot.ipynb
+

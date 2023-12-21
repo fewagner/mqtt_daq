@@ -29,7 +29,7 @@ import pickle
 
 
 broker = 'localhost'
-port = 1883
+port = 10401
 client_id = 'listener-secondary'
 username = 'fwagner'
 password = '1234'
@@ -67,11 +67,14 @@ client = connect_mqtt(broker, port, client_id, username, password, userdata={})
 # In[5]:
 
 
-subscribe(client, 'ccs/subscription/set')
-subscribe(client, 'ccs/subscription/ack')
-subscribe(client, 'ccs/trigger/samples')
-subscribe(client, 'ccs/control/set')
-subscribe(client, 'ccs/control/ack')
+# subscribe(client, 'ccs/subscription/set')
+# subscribe(client, 'ccs/subscription/ack')
+# subscribe(client, 'ccs/trigger/samples')
+# subscribe(client, 'ccs/control/set')
+# subscribe(client, 'ccs/control/ack')
+
+subscribe(client, 'trigger/#')
+subscribe(client, 'control/#')
 
 
 # In[6]:

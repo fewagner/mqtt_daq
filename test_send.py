@@ -19,7 +19,7 @@ from utils import *
 
 
 broker = 'localhost'
-port = 1883
+port = 10401
 client_id = 'test-primary'
 username = 'fwagner'
 password = '1234'
@@ -28,7 +28,7 @@ password = '1234'
 # In[3]:
 
 
-client_sender = connect_mqtt(broker, port, client_id, username, password)
+client_sender = connect_mqtt(broker, port, client_id, username, password, userdata={})
 
 
 # In[4]:

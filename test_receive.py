@@ -19,8 +19,8 @@ from utils import *
 
 
 broker = 'localhost'  # 'broker.hivemq.com'
-port = 1883
-client_id = 'test-secondary'
+port = 10401  # 1883
+client_id = 'test-secondary-clip'
 username = 'fwagner2'
 password = '12345'
 
@@ -28,7 +28,7 @@ password = '12345'
 # In[3]:
 
 
-client_receiver = connect_mqtt(broker, port, client_id, username, password)
+client_receiver = connect_mqtt(broker, port, client_id, username, password, userdata={})
 
 
 # In[8]:
@@ -42,7 +42,7 @@ subscribe(client_receiver, 'ccs/#')
 
 def receive(client, userdata, msg):
     # print(time.time(), json.loads(msg.payload))
-    print(time.time(), msg.payload)
+    print(time.time(), msg.topic, msg.payload)
 
 
 # In[10]:

@@ -18,8 +18,8 @@ from utils import *
 # In[2]:
 
 
-broker = 'broker.hivemq.com'
-port = 1883
+broker = 'localhost'  # 'broker.hivemq.com'
+port = 10401
 client_id = 'control-secondary'
 username = 'fwagner'
 password = '1234'
@@ -60,7 +60,7 @@ for i in range(nmbr_channels):
 # In[5]:
 
 
-client = connect_mqtt(broker, port, client_id, username, password)
+client = connect_mqtt(broker, port, client_id, username, password, userdata={})
 
 
 # In[6]:
